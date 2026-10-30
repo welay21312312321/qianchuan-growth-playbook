@@ -11,7 +11,8 @@ try{
  for(const width of [1440,390,320,375]){
   const context=await browser.newContext({viewport:{width,height:width===1440?1000:width===375?667:844},isMobile:width<700,hasTouch:width<700});
   const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));
-  const response=await page.goto(url,{waitUntil:'networkidle'});assert.equal(response.status(),200);
+  const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});assert.equal(response.status(),200);
+  await page.waitForFunction(()=>window.qianchuanStory&&[...document.querySelectorAll('.brand-lockup img,.brand-hero-image')].every(e=>e.complete&&e.naturalWidth>0),null,{timeout:20000});
   assert.equal(await page.locator('.brand-lockup').count(),2);
   for(const img of await page.locator('.brand-lockup img,.brand-hero-image').all())assert(await img.evaluate(e=>e.complete&&e.naturalWidth>0));
   const h1=await page.locator('h1').innerText();assert.match(h1,/看懂平台推流/);
@@ -41,7 +42,7 @@ try{
   report.checks.push(`${width}px: brand assets, persistent card, deterministic scroll states, every step, feedback branch, skip and 44px controls, no overflow`);
   await context.close();
  }
- const quiet=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});const page=await quiet.newPage();await page.goto(url,{waitUntil:'networkidle'});
+ const quiet=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});const page=await quiet.newPage();await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});await page.waitForFunction(()=>window.qianchuanStory);
  for(const p of [0,.5,1]){const s=await page.evaluate(p=>window.qianchuanStory.seek(p),p);assert.equal(s.x,50);assert.equal(s.y,49);assert(s.quiet);}
  report.checks.push('reduced motion: static card while information remains selectable');await quiet.close();
  assert.equal(report.errors.length,0,report.errors.join('\n'));report.passed=true;
