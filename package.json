@@ -1,0 +1,1 @@
+{"name":"qianchuan-growth-playbook","version":"0.1.0","private":true,"type":"module","scripts":{"dev":"node dev-server.mjs","check":"node --check dist/app.js && node tests/content-check.mjs"}}

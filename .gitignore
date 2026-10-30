@@ -1,0 +1,8 @@
+evidence/
+source-document-readback.json
+node_modules/
+.sites-runtime/
+.sites-checkout/
+*.tar.gz
+*.log
+.DS_Store

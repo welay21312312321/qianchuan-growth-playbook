@@ -1,0 +1,14 @@
+import { readFileSync,existsSync } from 'node:fs';
+import assert from 'node:assert/strict';
+const html=readFileSync('dist/index.html','utf8'),js=readFileSync('dist/app.js','utf8');
+const sources=JSON.parse(readFileSync('dist/assets/sources.json','utf8'));
+assert.equal(sources.document_revision,133,'Use the latest manual edits');
+assert.equal(sources.sources.length,8,'Source list follows current Feishu, not an older nine-link version');
+for(const s of sources.sources)assert(html.includes(s.url.replaceAll('&','&amp;'))||html.includes(s.url),s.title);
+for(const term of ['三块','候选','可比复测','条件入库','30套','40','30','无真实投放数据','画面本身不构成效果证明'])assert(html.includes(term),term);
+for(const term of ['原候选素材','单变量改版','不是平台出价目标','两轮表面好不等于证明因果'])assert(html.includes(term)||js.includes(term),term);
+assert(!html.includes('每周30条'));assert(!html.includes('GMV保证'));
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size,'Duplicate IDs');
+const resources=[...html.matchAll(/(?:src|poster|href)="([^"#][^"]*)"/g)].map(m=>m[1]).filter(s=>!/^https?:/.test(s));
+for(const file of resources)assert(existsSync('dist/'+file),file);
+console.log(JSON.stringify({passed:true,source_revision:133,official_sources:sources.sources.length,unique_ids:ids.length,local_assets:resources.length}));
