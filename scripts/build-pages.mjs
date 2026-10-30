@@ -1,0 +1,17 @@
+import {cpSync,mkdirSync,readFileSync,writeFileSync,existsSync} from 'node:fs';
+import path from 'node:path';
+const args=process.argv.slice(2);const value=name=>{const i=args.indexOf(name);return i>=0?args[i+1]:null;};
+const base=value('--base-url');if(!base)throw new Error('Provide --base-url from the actual GitHub Pages configuration.');
+const url=new URL(base);if(url.protocol!=='https:'||url.username||url.password)throw new Error('Use an HTTPS URL without credentials.');
+const out=path.resolve(value('--output')||'out/github-pages');const source=path.resolve('dist');
+if(out===source||source.startsWith(out+path.sep)||out===process.cwd())throw new Error('Use a separate deployment output directory.');
+mkdirSync(out,{recursive:true});
+for(const file of ['index.html','styles.css','app.js'])cpSync(path.join(source,file),path.join(out,file));
+mkdirSync(path.join(out,'assets'),{recursive:true});
+for(const file of ['qingyang-00s.png','qingyang-08s.png','qingyang-11s.png','qingyang-source.mp4','sources.json'])cpSync(path.join(source,'assets',file),path.join(out,'assets',file));
+const canonical=url.href.endsWith('/')?url.href:url.href+'/';const escape=s=>s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+let html=readFileSync(path.join(out,'index.html'),'utf8');
+html=html.replace(/(<meta property="og:url" content=")[^"]*(">)/,(_,a,b)=>a+escape(canonical)+b).replace(/(<link rel="canonical" href=")[^"]*(">)/,(_,a,b)=>a+escape(canonical)+b);
+writeFileSync(path.join(out,'index.html'),html);writeFileSync(path.join(out,'.nojekyll'),'');
+if(existsSync(path.join(out,'.openai')))throw new Error('Do not publish Sites hosting configuration. Use a clean output directory.');
+console.log(JSON.stringify({output:out,canonical,assets:5,scope:'website files only; no source snapshots, credentials, QA or local paths'}));

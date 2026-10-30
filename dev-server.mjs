@@ -1,11 +1,13 @@
 import http from 'node:http';
 import { createReadStream, statSync } from 'node:fs';
 import path from 'node:path';
-const root=path.resolve('dist');
+const root=path.resolve(process.env.STATIC_ROOT||'dist');
+const prefix=(process.env.BASE_PATH||'').replace(/\/$/,'');
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png','.mp4':'video/mp4'};
 const server=http.createServer((req,res)=>{
   if(!['GET','HEAD'].includes(req.method)){res.writeHead(405);res.end();return;}
   let name;try{name=decodeURIComponent(new URL(req.url,'http://localhost').pathname);}catch{res.writeHead(400);res.end();return;}
+  if(prefix){if(name===prefix){res.writeHead(302,{Location:prefix+'/'});res.end();return;}if(!name.startsWith(prefix+'/')){res.writeHead(404);res.end();return;}name=name.slice(prefix.length);}
   const file=path.resolve(root,'.'+(name==='/'?'/index.html':name));
   if(!file.startsWith(root+path.sep)){res.writeHead(403);res.end();return;}
   let stat;try{stat=statSync(file);if(!stat.isFile())throw new Error();}catch{res.writeHead(404);res.end('Not found');return;}
