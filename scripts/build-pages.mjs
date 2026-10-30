@@ -6,12 +6,14 @@ const url=new URL(base);if(url.protocol!=='https:'||url.username||url.password)t
 const out=path.resolve(value('--output')||'out/github-pages');const source=path.resolve('dist');
 if(out===source||source.startsWith(out+path.sep)||out===process.cwd())throw new Error('Use a separate deployment output directory.');
 mkdirSync(out,{recursive:true});
-for(const file of ['index.html','styles.css','app.js'])cpSync(path.join(source,file),path.join(out,file));
+for(const file of ['index.html','styles.css','brand.css','app.js','journey.js'])cpSync(path.join(source,file),path.join(out,file));
 mkdirSync(path.join(out,'assets'),{recursive:true});
 for(const file of ['qingyang-00s.png','qingyang-08s.png','qingyang-11s.png','qingyang-source.mp4','sources.json'])cpSync(path.join(source,'assets',file),path.join(out,'assets',file));
+mkdirSync(path.join(out,'assets','brand'),{recursive:true});
+for(const file of ['clipo-logo.png','mascot-head.png','tezign-symbol-white.png','clipo-feedback-hero.png'])cpSync(path.join(source,'assets','brand',file),path.join(out,'assets','brand',file));
 const canonical=url.href.endsWith('/')?url.href:url.href+'/';const escape=s=>s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 let html=readFileSync(path.join(out,'index.html'),'utf8');
 html=html.replace(/(<meta property="og:url" content=")[^"]*(">)/,(_,a,b)=>a+escape(canonical)+b).replace(/(<link rel="canonical" href=")[^"]*(">)/,(_,a,b)=>a+escape(canonical)+b);
 writeFileSync(path.join(out,'index.html'),html);writeFileSync(path.join(out,'.nojekyll'),'');
 if(existsSync(path.join(out,'.openai')))throw new Error('Do not publish Sites hosting configuration. Use a clean output directory.');
-console.log(JSON.stringify({output:out,canonical,assets:5,scope:'website files only; no source snapshots, credentials, QA or local paths'}));
+console.log(JSON.stringify({output:out,canonical,assets:9,scope:'website files only; no source snapshots, credentials, QA or local paths'}));

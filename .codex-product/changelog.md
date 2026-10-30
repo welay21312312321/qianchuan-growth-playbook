@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.0 - 2026-10-30
+
+- 采用Tezign/Clipo真实标识与小可IP，Images 2.5生成品牌效果稿与透明主视觉。
+- 原生HTML/SVG连续素材卡、反馈切换与六步执行台联动；手机矮屏保留手动步骤，减少动态时素材固定。
+- 本地原交互、视频、三种手机尺寸及品牌故事检查通过，发布后以真实地址回读关闭。
+
 ## v0.1.1 - 2026-10-30
 
 - Created release skeleton for theme: git-hosted-release
