@@ -1,5 +1,5 @@
 {
-  "project_name": "\u5343\u5ddd\u5185\u5bb9\u589e\u957f\u4ea4\u4e92\u65b9\u6848",
+  "project_name": "千川内容增长交互方案",
   "current_version": "v0.1.1",
   "versions": [
     "v0.1.0",
@@ -7,5 +7,7 @@
   ],
   "created_at": "2026-10-30",
   "updated_at": "2026-10-30",
-  "workflow": "agile-product-factory"
+  "workflow": "agile-product-factory",
+  "hosting_target": "github-pages",
+  "publication_approval": "2026-10-30 direct human confirmation"
 }

@@ -5,9 +5,9 @@
 ## 当前状态
 
 - 原线上版已经通过 ChatGPT Sites 私有发布。
-- 本 GitHub 仓库当前保持私有，GitHub Pages 尚未启用。
-- 手动发布工作流带有 `PAGES_PUBLICATION_APPROVED` 仓库变量门禁；未确认公开范围前不设置、不触发。
-- GitHub Pages 通常面向互联网公开，即使源仓库私有。公开网页、示例素材和是否公开源仓库需由本人确认。
+- 本人已于2026-10-30明确允许公开网页、源码及现有清扬示例。本仓库已公开，Pages已配置为GitHub Actions发布。
+- 网页入口：https://welay21312312321.github.io/qianchuan-growth-playbook/ 。是否发布成功，以最新Actions运行及真实地址检查为准。
+- 发布工作流带有 `PAGES_PUBLICATION_APPROVED` 仓库变量门禁；公开范围确认后已启用。后续推送main会更新网站，也可手动触发。
 
 ## 本地预览与检查
 
@@ -21,9 +21,9 @@ node tests/content-check.mjs
 
 ## GitHub Pages 发布流程
 
-1. 确认允许的公开范围，并确认仓库套餐支持该发布方式；本项目不自动升级套餐。
-2. 在 Pages 设置中选择 GitHub Actions。
-3. 设置仓库变量 `PAGES_PUBLICATION_APPROVED=true`，再手动运行 `Deploy Qianchuan Pages`。
+1. 保持本人确认的公开范围；本项目不自动购买或升级套餐。
+2. Pages设置已选择GitHub Actions。
+3. 仓库变量 `PAGES_PUBLICATION_APPROVED=true`，推送main或手动运行 `Deploy Qianchuan Pages`。
 4. 工作流读取实际 Pages `base_url`，构建项目子路径兼容版本并部署。
 5. 必须以 Actions 成功、Pages 返回地址和该地址的HTTP/资源验证作为发布完成证据。仓库链接不是线上网页链接。
 
